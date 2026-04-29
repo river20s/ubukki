@@ -1,0 +1,36 @@
+---
+import BaseLayout from '../../layouts/BaseLayout.astro';
+import { getCollection } from 'astro:content';
+
+const projects = await getCollection('projects');
+---
+
+<BaseLayout title="Projects" description="강은빈이 만든 프로젝트들">
+  <div class="max-w-[680px] mx-auto px-5 py-12">
+    <h1>Projects</h1>
+    <hr />
+    {projects.length === 0 ? (
+      <p class="mt-8 text-[var(--color-text-meta)]">아직 등록된 프로젝트가 없습니다.</p>
+    ) : (
+      <ul class="list-none pl-0 mt-8 space-y-6">
+        {projects.map((project) => (
+          <li class="border border-[var(--color-rule)] rounded-[4px] p-5">
+            <a href={`/projects/${project.id}`} class="no-underline group">
+              <h2 class="text-base font-medium mt-0 group-hover:text-[var(--color-accent)] transition-colors duration-150">
+                {project.data.title}
+              </h2>
+              <p class="text-[var(--color-text-soft)] text-sm mt-1 mb-3">{project.data.description}</p>
+              <div class="flex flex-wrap gap-1.5">
+                {project.data.techStack.map((tech) => (
+                  <span class="text-xs bg-[var(--color-tag-bg)] text-[var(--color-text-meta)] px-2 py-0.5 rounded-sm">
+                    {tech}
+                  </span>
+                ))}
+              </div>
+            </a>
+          </li>
+        ))}
+      </ul>
+    )}
+  </div>
+</BaseLayout>

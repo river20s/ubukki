@@ -1,0 +1,65 @@
+---
+import { getCollection, render } from 'astro:content';
+import BaseLayout from '../../layouts/BaseLayout.astro';
+
+export async function getStaticPaths() {
+  const projects = await getCollection('projects');
+  return projects.map((project) => ({
+    params: { slug: project.id },
+    props: { project },
+  }));
+}
+
+const { project } = Astro.props;
+const { Content } = await render(project);
+
+const startFormatted = project.data.period.start.toLocaleDateString('ko-KR', { year: 'numeric', month: 'long' });
+const endFormatted = project.data.period.end
+  ? project.data.period.end.toLocaleDateString('ko-KR', { year: 'numeric', month: 'long' })
+  : '진행 중';
+---
+
+<BaseLayout
+  title={project.data.title}
+  description={project.data.description}
+  type="website"
+>
+  <div class="max-w-[680px] mx-auto px-5 py-12">
+    <header class="mb-10">
+      <p class="text-meta mb-3">
+        <a href="/projects" class="no-underline hover:underline">Projects</a>
+      </p>
+      <h1>{project.data.title}</h1>
+      <p class="text-[var(--color-text-soft)] mt-2">{project.data.description}</p>
+      <div class="mt-4 text-meta space-y-1">
+        <p>기간: {startFormatted} — {endFormatted}</p>
+        <p>역할: {project.data.role}</p>
+      </div>
+      {project.data.techStack.length > 0 && (
+        <div class="flex flex-wrap gap-1.5 mt-4">
+          {project.data.techStack.map((tech) => (
+            <span class="text-xs bg-[var(--color-tag-bg)] text-[var(--color-text-meta)] px-2 py-0.5 rounded-sm">
+              {tech}
+            </span>
+          ))}
+        </div>
+      )}
+      <div class="flex gap-4 mt-4">
+        {project.data.links.github && (
+          <a href={project.data.links.github} class="text-sm" target="_blank" rel="noopener">GitHub →</a>
+        )}
+        {project.data.links.demo && (
+          <a href={project.data.links.demo} class="text-sm" target="_blank" rel="noopener">Demo →</a>
+        )}
+      </div>
+    </header>
+    <hr />
+    <article class="mt-10 prose">
+      <Content />
+    </article>
+    <hr class="mt-12" />
+    <footer class="mt-6 text-sm text-[var(--color-text-meta)]">
+      <a href="/projects" class="no-underline hover:underline">← 목록으로</a>
+    </footer>
+  </div>
+</BaseLayout>

@@ -1,0 +1,13 @@
+---
+import { SITE_AUTHOR, SITE_MOTTO } from '../consts';
+
+const year = new Date().getFullYear();
+---
+
+<footer class="border-t border-[var(--color-rule)] mt-16">
+  <div class="max-w-[680px] mx-auto px-5 py-8 flex flex-col sm:flex-row items-center justify-between gap-3 text-[13px] text-[var(--color-text-meta)]">
+    <span>© {year} {SITE_AUTHOR}</span>
+    <span class="italic">{SITE_MOTTO}</span>
+    <a href="/rss.xml" class="no-underline hover:text-[var(--color-text)] transition-colors duration-150">RSS</a>
+  </div>
+</footer>

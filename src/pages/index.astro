@@ -1,0 +1,46 @@
+---
+import BaseLayout from '../layouts/BaseLayout.astro';
+import { SITE_DESCRIPTION } from '../consts';
+---
+
+<BaseLayout description={SITE_DESCRIPTION}>
+  <div class="max-w-[680px] mx-auto px-5 py-12">
+    <section class="mb-16">
+      <p class="section-label mb-6">main</p>
+      <hr />
+      <div class="prose mt-8">
+        <p>
+          만드는 사람 강은빈(ubukki)입니다.
+        </p>
+        <p>
+          생활과 밀접한 앱을 기획하고 개발합니다. 학습 과정에서의 궁금증을 포착하고 해결하는
+          모야 리스트(Moya List), 친구들과의 아지트 같은 작업실을 온라인으로 옮겨온
+          체크 메이트(Check Mate) 등을 만들고 있습니다.
+        </p>
+        <p>
+          블로그에는 만드는 과정에서 떠올린 것, 마주친 문제, 구현하고 해결해가는 과정을
+          기록으로 남깁니다.
+        </p>
+        <ul class="list-none pl-0">
+          <li><a href="/about">About me</a></li>
+          <li><a href="/blog">Blog</a></li>
+          <li><a href="/projects">Projects</a></li>
+        </ul>
+        <p class="text-meta mt-8">
+          이 웹사이트는 2026년 4월 29일에 갱신되었습니다.
+        </p>
+      </div>
+      <hr class="mt-8" />
+    </section>
+
+    <section class="mb-16">
+      <p class="section-label mb-4">Recent Posts</p>
+      <p class="text-[var(--color-text-meta)] text-sm">아직 작성된 글이 없습니다.</p>
+    </section>
+
+    <section>
+      <p class="section-label mb-4">Projects</p>
+      <p class="text-[var(--color-text-meta)] text-sm">프로젝트를 준비 중입니다.</p>
+    </section>
+  </div>
+</BaseLayout>

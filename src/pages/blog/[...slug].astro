@@ -1,0 +1,71 @@
+---
+import { getCollection, render } from 'astro:content';
+import BaseLayout from '../../layouts/BaseLayout.astro';
+import { getCategoryLabel } from '../../consts';
+
+export async function getStaticPaths() {
+  const posts = await getCollection('blog', ({ data }) => !data.draft);
+  return posts.map((post) => ({
+    params: { slug: post.id },
+    props: { post },
+  }));
+}
+
+const { post } = Astro.props;
+const { Content } = await render(post);
+
+const pubFormatted = post.data.pubDate.toLocaleDateString('ko-KR', {
+  year: 'numeric', month: 'long', day: 'numeric',
+});
+const updFormatted = post.data.updatedDate?.toLocaleDateString('ko-KR', {
+  year: 'numeric', month: 'long', day: 'numeric',
+});
+---
+
+<BaseLayout
+  title={post.data.title}
+  description={post.data.description}
+  ogImage={post.data.ogImage}
+  pubDate={post.data.pubDate}
+  updatedDate={post.data.updatedDate}
+  type="article"
+>
+  <div class="max-w-[680px] mx-auto px-5 py-12">
+    <header class="mb-10">
+      <p class="text-meta mb-3">
+        <a href="/blog" class="no-underline hover:underline">Blog</a>
+        {' / '}
+        <a href={`/category/${post.data.category}`} class="no-underline">
+          <span class="bg-[var(--color-tag-bg)] px-2 py-0.5 rounded-sm text-[var(--color-accent)] text-xs">
+            {getCategoryLabel(post.data.category)}
+          </span>
+        </a>
+      </p>
+      <h1>{post.data.title}</h1>
+      <p class="text-meta mt-2">
+        {pubFormatted}
+        {updFormatted && <span> · 수정: {updFormatted}</span>}
+      </p>
+      {post.data.tags.length > 0 && (
+        <div class="flex flex-wrap gap-1.5 mt-3">
+          {post.data.tags.map((tag) => (
+            <a
+              href={`/tag/${tag}`}
+              class="text-xs text-[var(--color-text-meta)] no-underline hover:text-[var(--color-accent)] transition-colors duration-150"
+            >
+              #{tag}
+            </a>
+          ))}
+        </div>
+      )}
+    </header>
+    <hr />
+    <article class="mt-10 prose">
+      <Content />
+    </article>
+    <hr class="mt-12" />
+    <footer class="mt-6 text-sm text-[var(--color-text-meta)]">
+      <a href="/blog" class="no-underline hover:underline">← 목록으로</a>
+    </footer>
+  </div>
+</BaseLayout>

@@ -1,0 +1,39 @@
+---
+import ThemeToggle from './ThemeToggle.astro';
+import { SITE_TITLE } from '../consts';
+
+const nav = [
+  { href: '/blog',     label: 'Blog' },
+  { href: '/projects', label: 'Projects' },
+  { href: '/about',    label: 'About' },
+];
+
+const { pathname } = Astro.url;
+---
+
+<header class="sticky top-0 z-50 bg-[var(--color-paper-bg)] border-b border-[var(--color-rule)] transition-colors duration-200">
+  <div class="max-w-[680px] mx-auto px-5 py-4 flex items-center justify-between">
+    <a href="/" class="font-medium text-[var(--color-text)] no-underline hover:opacity-75 transition-opacity duration-150">
+      {SITE_TITLE}
+    </a>
+    <nav class="flex items-center gap-5">
+      {nav.map(({ href, label }) => {
+        const isActive = pathname === href || pathname.startsWith(href + '/');
+        return (
+          <a
+            href={href}
+            class:list={[
+              'text-sm no-underline transition-opacity duration-150',
+              isActive
+                ? 'text-[var(--color-text)] font-medium'
+                : 'text-[var(--color-text-meta)] hover:text-[var(--color-text)]',
+            ]}
+          >
+            {label}
+          </a>
+        );
+      })}
+      <ThemeToggle />
+    </nav>
+  </div>
+</header>

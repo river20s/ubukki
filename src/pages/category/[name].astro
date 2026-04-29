@@ -1,0 +1,43 @@
+---
+import { getCollection } from 'astro:content';
+import BaseLayout from '../../layouts/BaseLayout.astro';
+import { CATEGORIES, getCategoryLabel, type CategoryId } from '../../consts';
+
+export async function getStaticPaths() {
+  return CATEGORIES.map(({ id }) => ({ params: { name: id } }));
+}
+
+const { name } = Astro.params;
+const categoryId = name as CategoryId;
+const label = getCategoryLabel(categoryId);
+
+const posts = (await getCollection('blog', ({ data }) => !data.draft && data.category === categoryId))
+  .sort((a, b) => b.data.pubDate.valueOf() - a.data.pubDate.valueOf());
+---
+
+<BaseLayout title={`${label} — Blog`} description={`${label} 카테고리의 글 목록`}>
+  <div class="max-w-[680px] mx-auto px-5 py-12">
+    <p class="section-label mb-2">Category</p>
+    <h1>{label}</h1>
+    <hr />
+    {posts.length === 0 ? (
+      <p class="mt-8 text-[var(--color-text-meta)]">아직 작성된 글이 없습니다.</p>
+    ) : (
+      <ul class="list-none pl-0 mt-8 space-y-8">
+        {posts.map((post) => (
+          <li class="border-b border-[var(--color-rule)] pb-8 last:border-none">
+            <a href={`/blog/${post.id}`} class="no-underline group">
+              <h2 class="text-lg font-medium mt-0 group-hover:text-[var(--color-accent)] transition-colors duration-150">
+                {post.data.title}
+              </h2>
+              <p class="text-meta mt-1 mb-2">
+                {post.data.pubDate.toLocaleDateString('ko-KR', { year: 'numeric', month: 'long', day: 'numeric' })}
+              </p>
+              <p class="text-[var(--color-text-soft)] text-sm">{post.data.description}</p>
+            </a>
+          </li>
+        ))}
+      </ul>
+    )}
+  </div>
+</BaseLayout>
