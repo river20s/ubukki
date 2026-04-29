@@ -3,7 +3,15 @@ import BaseLayout from './BaseLayout.astro';
 import CategoryBadge from '../components/CategoryBadge.astro';
 import TagList from '../components/TagList.astro';
 import Giscus from '../components/Giscus.astro';
+import ReadingProgress from '../components/ReadingProgress.astro';
+import TOC from '../components/TOC.astro';
 import type { CategoryId } from '../consts';
+
+interface Heading {
+  depth: number;
+  slug: string;
+  text: string;
+}
 
 interface Props {
   title: string;
@@ -13,11 +21,12 @@ interface Props {
   category: CategoryId;
   tags: string[];
   ogImage?: string;
+  headings: Heading[];
   prev?: { slug: string; title: string };
   next?: { slug: string; title: string };
 }
 
-const { title, description, pubDate, updatedDate, category, tags, ogImage, prev, next } = Astro.props;
+const { title, description, pubDate, updatedDate, category, tags, ogImage, headings, prev, next } = Astro.props;
 
 const pubFormatted = pubDate.toLocaleDateString('ko-KR', {
   year: 'numeric', month: 'long', day: 'numeric',
@@ -25,59 +34,80 @@ const pubFormatted = pubDate.toLocaleDateString('ko-KR', {
 const updFormatted = updatedDate?.toLocaleDateString('ko-KR', {
   year: 'numeric', month: 'long', day: 'numeric',
 });
+
+const tocHeadings = headings.filter(h => h.depth === 2 || h.depth === 3);
 ---
 
 <BaseLayout title={title} description={description} ogImage={ogImage} pubDate={pubDate} updatedDate={updatedDate} type="article">
-  <div class="max-w-[680px] mx-auto px-5 py-12">
-    <!-- 헤더 -->
-    <header class="mb-8">
-      <div class="flex items-center gap-2 mb-4">
-        <a href="/blog" class="text-meta no-underline hover:text-[var(--color-text)] transition-colors duration-150">Blog</a>
-        <span class="text-[var(--color-rule)]">/</span>
-        <CategoryBadge category={category} />
+  <ReadingProgress />
+
+  <div class="px-5 py-12">
+    <!-- 모바일 목차 (lg 미만에서만 표시) -->
+    {tocHeadings.length > 0 && (
+      <TOC headings={headings} variant="mobile" />
+    )}
+
+    <!-- 본문 + 데스크톱 목차 -->
+    <div class="flex justify-center gap-12">
+      <div class="w-full max-w-[680px] min-w-0">
+        <!-- 헤더 -->
+        <header class="mb-8">
+          <div class="flex items-center gap-2 mb-4">
+            <a href="/blog" class="text-meta no-underline hover:text-[var(--color-text)] transition-colors duration-150">Blog</a>
+            <span class="text-[var(--color-rule)]">/</span>
+            <CategoryBadge category={category} />
+          </div>
+          <h1 class="mb-3">{title}</h1>
+          <p class="text-meta mb-3">
+            {pubFormatted}
+            {updFormatted && <span> · 수정: {updFormatted}</span>}
+          </p>
+          <TagList tags={tags} />
+        </header>
+
+        <hr />
+
+        <!-- 본문 -->
+        <article class="prose mt-10">
+          <slot />
+        </article>
+
+        <hr class="mt-12" />
+
+        <!-- 이전/다음 글 -->
+        <nav class="mt-8 grid grid-cols-2 gap-4 text-sm">
+          <div>
+            {prev && (
+              <a href={`/blog/${prev.slug}`} class="no-underline group block">
+                <span class="section-label block mb-1">이전 글</span>
+                <span class="text-[var(--color-text-soft)] group-hover:text-[var(--color-accent)] transition-colors duration-150 leading-snug">
+                  ← {prev.title}
+                </span>
+              </a>
+            )}
+          </div>
+          <div class="text-right">
+            {next && (
+              <a href={`/blog/${next.slug}`} class="no-underline group block">
+                <span class="section-label block mb-1">다음 글</span>
+                <span class="text-[var(--color-text-soft)] group-hover:text-[var(--color-accent)] transition-colors duration-150 leading-snug">
+                  {next.title} →
+                </span>
+              </a>
+            )}
+          </div>
+        </nav>
+
+        <!-- 댓글 -->
+        <Giscus />
       </div>
-      <h1 class="mb-3">{title}</h1>
-      <p class="text-meta mb-3">
-        {pubFormatted}
-        {updFormatted && <span> · 수정: {updFormatted}</span>}
-      </p>
-      <TagList tags={tags} />
-    </header>
 
-    <hr />
-
-    <!-- 본문 -->
-    <article class="prose mt-10">
-      <slot />
-    </article>
-
-    <hr class="mt-12" />
-
-    <!-- 이전/다음 글 -->
-    <nav class="mt-8 grid grid-cols-2 gap-4 text-sm">
-      <div>
-        {prev && (
-          <a href={`/blog/${prev.slug}`} class="no-underline group block">
-            <span class="section-label block mb-1">이전 글</span>
-            <span class="text-[var(--color-text-soft)] group-hover:text-[var(--color-accent)] transition-colors duration-150 leading-snug">
-              ← {prev.title}
-            </span>
-          </a>
-        )}
-      </div>
-      <div class="text-right">
-        {next && (
-          <a href={`/blog/${next.slug}`} class="no-underline group block">
-            <span class="section-label block mb-1">다음 글</span>
-            <span class="text-[var(--color-text-soft)] group-hover:text-[var(--color-accent)] transition-colors duration-150 leading-snug">
-              {next.title} →
-            </span>
-          </a>
-        )}
-      </div>
-    </nav>
-
-    <!-- 댓글 -->
-    <Giscus />
+      <!-- 데스크톱 목차 (lg 이상에서만 표시) -->
+      {tocHeadings.length > 0 && (
+        <div class="hidden lg:block">
+          <TOC headings={headings} variant="desktop" />
+        </div>
+      )}
+    </div>
   </div>
 </BaseLayout>

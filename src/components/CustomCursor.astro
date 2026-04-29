@@ -1,0 +1,24 @@
+---
+---
+<!-- 거북이 커서 — https://www.cursors-4u.com/cursor/nat71 -->
+<link rel="stylesheet" href="https://cdn.cursors-4u.net/cursors/animated/nat71-57d7deda-32.css" />
+<style is:global>
+  /* 터치 디바이스 또는 reduced-motion이면 기본 커서로 */
+  @media (pointer: coarse) {
+    * { cursor: auto !important; }
+  }
+  @media (prefers-reduced-motion: reduce) {
+    * { cursor: auto !important; }
+  }
+
+  /* 텍스트 영역은 I-beam 커서 */
+  p, h1, h2, h3, h4, h5, h6,
+  blockquote, li, td, th, code, pre, span, label {
+    cursor: text !important;
+  }
+
+  /* 링크·버튼은 pointer */
+  a, button, [role="button"], select, [data-cursor-hover] {
+    cursor: pointer !important;
+  }
+</style>

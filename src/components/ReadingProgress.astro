@@ -1,0 +1,21 @@
+---
+---
+<div
+  id="reading-progress"
+  aria-hidden="true"
+  style="position:fixed;top:0;left:0;height:3px;width:0;z-index:100;background-color:var(--color-accent);transition:none;"
+></div>
+
+<script is:inline>
+  (function () {
+    var bar = document.getElementById('reading-progress');
+    if (!bar) return;
+    function update() {
+      var total = document.body.scrollHeight - window.innerHeight;
+      var pct = total > 0 ? Math.min(100, (window.scrollY / total) * 100) : 0;
+      bar.style.width = pct + '%';
+    }
+    window.addEventListener('scroll', update, { passive: true });
+    update();
+  })();
+</script>
