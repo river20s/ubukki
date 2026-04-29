@@ -14,7 +14,7 @@ interface Props {
 const {
   title,
   description = SITE_DESCRIPTION,
-  ogImage = '/og-default.png',
+  ogImage = '/og/default.png',
   pubDate,
   updatedDate,
   type = 'website',
@@ -27,6 +27,43 @@ const ogImageURL = ogImage.startsWith('http') ? ogImage : new URL(ogImage, SITE_
 
 const googleVerification = import.meta.env.PUBLIC_GOOGLE_VERIFICATION;
 const naverVerification = import.meta.env.PUBLIC_NAVER_VERIFICATION;
+
+// JSON-LD
+const websiteSchema = {
+  '@context': 'https://schema.org',
+  '@type': 'WebSite',
+  name: SITE_TITLE,
+  url: SITE_URL,
+  description: SITE_DESCRIPTION,
+  author: {
+    '@type': 'Person',
+    name: SITE_AUTHOR,
+    url: `${SITE_URL}/about`,
+  },
+};
+
+const articleSchema = type === 'article' && pubDate
+  ? {
+      '@context': 'https://schema.org',
+      '@type': 'BlogPosting',
+      headline: pageTitle,
+      description,
+      url: canonicalURL,
+      image: ogImageURL,
+      datePublished: pubDate.toISOString(),
+      dateModified: (updatedDate ?? pubDate).toISOString(),
+      author: {
+        '@type': 'Person',
+        name: SITE_AUTHOR,
+        url: `${SITE_URL}/about`,
+      },
+      publisher: {
+        '@type': 'Person',
+        name: SITE_AUTHOR,
+        url: SITE_URL,
+      },
+    }
+  : null;
 ---
 
 <meta charset="utf-8" />
@@ -74,3 +111,9 @@ const naverVerification = import.meta.env.PUBLIC_NAVER_VERIFICATION;
 
 <!-- RSS -->
 <link rel="alternate" type="application/rss+xml" title={SITE_TITLE} href="/rss.xml" />
+
+<!-- JSON-LD -->
+<script type="application/ld+json" set:html={JSON.stringify(websiteSchema)} />
+{articleSchema && (
+  <script type="application/ld+json" set:html={JSON.stringify(articleSchema)} />
+)}

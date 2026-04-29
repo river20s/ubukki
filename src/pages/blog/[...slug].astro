@@ -32,7 +32,7 @@ const { Content } = await render(post);
   updatedDate={post.data.updatedDate}
   category={post.data.category as CategoryId}
   tags={post.data.tags}
-  ogImage={post.data.ogImage}
+  ogImage={post.data.ogImage ?? `/og/${post.id}.png`}
   prev={prev}
   next={next}
 >

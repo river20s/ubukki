@@ -14,5 +14,10 @@
 		"@tailwindcss/vite": "^4.2.4",
 		"astro": "^6.1.10",
 		"tailwindcss": "^4.2.4"
+	},
+	"dependencies": {
+		"@fontsource/noto-sans-kr": "^5.2.9",
+		"@resvg/resvg-js": "^2.6.2",
+		"satori": "^0.26.0"
 	}
 }
