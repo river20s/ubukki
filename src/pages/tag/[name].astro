@@ -1,6 +1,8 @@
 ---
 import { getCollection } from 'astro:content';
 import BaseLayout from '../../layouts/BaseLayout.astro';
+import PostCard from '../../components/PostCard.astro';
+import type { CategoryId } from '../../consts';
 
 export async function getStaticPaths() {
   const posts = await getCollection('blog', ({ data }) => !data.draft);
@@ -24,17 +26,14 @@ const posts = (await getCollection('blog', ({ data }) => !data.draft && data.tag
     ) : (
       <ul class="list-none pl-0 mt-8 space-y-8">
         {posts.map((post) => (
-          <li class="border-b border-[var(--color-rule)] pb-8 last:border-none">
-            <a href={`/blog/${post.id}`} class="no-underline group">
-              <h2 class="text-lg font-medium mt-0 group-hover:text-[var(--color-accent)] transition-colors duration-150">
-                {post.data.title}
-              </h2>
-              <p class="text-meta mt-1 mb-2">
-                {post.data.pubDate.toLocaleDateString('ko-KR', { year: 'numeric', month: 'long', day: 'numeric' })}
-              </p>
-              <p class="text-[var(--color-text-soft)] text-sm">{post.data.description}</p>
-            </a>
-          </li>
+          <PostCard
+            title={post.data.title}
+            description={post.data.description}
+            pubDate={post.data.pubDate}
+            category={post.data.category as CategoryId}
+            tags={post.data.tags}
+            slug={post.id}
+          />
         ))}
       </ul>
     )}

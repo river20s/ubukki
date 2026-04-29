@@ -1,0 +1,16 @@
+---
+import { getCategoryLabel, type CategoryId } from '../consts';
+
+interface Props {
+  category: CategoryId;
+}
+
+const { category } = Astro.props;
+---
+
+<a
+  href={`/category/${category}`}
+  class="inline-block text-xs bg-[var(--color-tag-bg)] text-[var(--color-accent)] px-2 py-0.5 rounded-sm no-underline hover:opacity-75 transition-opacity duration-150"
+>
+  {getCategoryLabel(category)}
+</a>

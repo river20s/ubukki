@@ -1,0 +1,39 @@
+---
+import CategoryBadge from './CategoryBadge.astro';
+import TagList from './TagList.astro';
+import type { CategoryId } from '../consts';
+
+interface Props {
+  title: string;
+  description: string;
+  pubDate: Date;
+  category: CategoryId;
+  tags: string[];
+  slug: string;
+}
+
+const { title, description, pubDate, category, tags, slug } = Astro.props;
+
+const dateFormatted = pubDate.toLocaleDateString('ko-KR', {
+  year: 'numeric',
+  month: 'long',
+  day: 'numeric',
+});
+---
+
+<li class="border-b border-[var(--color-rule)] pb-8 last:border-none">
+  <article>
+    <a href={`/blog/${slug}`} class="no-underline group">
+      <h2 class="text-[18px] font-medium leading-snug mt-0 mb-2 text-[var(--color-text)] group-hover:text-[var(--color-accent)] transition-colors duration-150">
+        {title}
+      </h2>
+    </a>
+    <div class="flex items-center gap-2 mb-2">
+      <span class="text-meta">{dateFormatted}</span>
+      <span class="text-[var(--color-rule)]">·</span>
+      <CategoryBadge category={category} />
+    </div>
+    <p class="text-[var(--color-text-soft)] text-[15px] leading-relaxed mb-3">{description}</p>
+    <TagList tags={tags} />
+  </article>
+</li>
