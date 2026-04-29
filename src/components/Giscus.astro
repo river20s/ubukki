@@ -10,6 +10,16 @@ const categoryId = import.meta.env.PUBLIC_GISCUS_CATEGORY_ID;
 const isConfigured = repo && repoId && category && categoryId;
 ---
 
+{!isConfigured && (
+  <div class="mt-12">
+    <hr class="mb-10" />
+    <p class="text-meta text-sm">
+      댓글 기능은 <a href="https://giscus.app" target="_blank" rel="noopener noreferrer">giscus.app</a>에서
+      저장소 설정 후 환경변수를 채우면 활성화됩니다.
+    </p>
+  </div>
+)}
+
 {isConfigured && (
   <div id="giscus-container" class="mt-12">
     <hr class="mb-10" />
