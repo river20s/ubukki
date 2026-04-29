@@ -1,13 +1,108 @@
 ---
 import BaseLayout from '../layouts/BaseLayout.astro';
+import { SITE_AUTHOR } from '../consts';
+
+const techStack = [
+  { category: 'Mobile', items: ['Android', 'Kotlin', 'Jetpack Compose'] },
+  { category: 'Frontend', items: ['React', 'TypeScript', 'Tailwind CSS'] },
+  { category: 'Backend', items: ['Java', 'Spring Boot'] },
+  { category: 'Database', items: ['MySQL', 'Firebase', 'Room'] },
+  { category: 'Infra', items: ['Git', 'GitHub Actions'] },
+];
 ---
 
-<BaseLayout title="About" description="만드는 사람 강은빈(ubukki) 소개">
+<BaseLayout title="About" description={`만드는 사람 ${SITE_AUTHOR}(ubukki) 소개`}>
   <div class="max-w-[680px] mx-auto px-5 py-12">
     <h1>About</h1>
     <hr />
-    <p class="mt-8 text-[var(--color-text-meta)]">
-      자기소개를 작성해주세요.
-    </p>
+
+    <!-- 자기소개 -->
+    <section class="mt-10 prose">
+      <!-- ✏️ 이 섹션을 직접 작성해주세요 -->
+      <p>안녕하세요, 강은빈입니다.</p>
+      <p>
+        <!-- 자기소개 본문을 여기에 작성해주세요. -->
+      </p>
+    </section>
+
+    <hr class="mt-12" />
+
+    <!-- 기술 스택 -->
+    <section class="mt-10">
+      <p class="section-label mb-6">Tech Stack</p>
+      <dl class="space-y-4">
+        {techStack.map(({ category, items }) => (
+          <div class="flex gap-6 sm:gap-10">
+            <dt class="text-meta w-20 shrink-0 pt-0.5">{category}</dt>
+            <dd class="flex flex-wrap gap-1.5">
+              {items.map((item) => (
+                <span class="text-sm bg-[var(--color-tag-bg)] text-[var(--color-text-soft)] px-2.5 py-0.5 rounded-sm">
+                  {item}
+                </span>
+              ))}
+            </dd>
+          </div>
+        ))}
+      </dl>
+    </section>
+
+    <hr class="mt-12" />
+
+    <!-- 관심사 -->
+    <section class="mt-10 prose">
+      <p class="section-label mb-6">Interests</p>
+      <!-- ✏️ 관심사를 직접 작성해주세요 -->
+      <ul>
+        <li>생활과 밀접한 문제를 해결하는 앱 만들기</li>
+        <li><!-- 관심사 추가 --></li>
+      </ul>
+    </section>
+
+    <hr class="mt-12" />
+
+    <!-- 연락처 -->
+    <section class="mt-10">
+      <p class="section-label mb-6">Contact</p>
+      <ul class="list-none pl-0 space-y-2 text-sm">
+        <li>
+          <!-- ✏️ 이메일 주소를 채워주세요 -->
+          <a href="mailto:your@email.com" class="text-[var(--color-text-soft)] hover:text-[var(--color-accent)] transition-colors duration-150">
+            your@email.com
+          </a>
+        </li>
+        <li>
+          <!-- ✏️ GitHub 주소를 채워주세요 -->
+          <a href="https://github.com/ubukki" class="text-[var(--color-text-soft)] hover:text-[var(--color-accent)] transition-colors duration-150" target="_blank" rel="noopener noreferrer">
+            github.com/ubukki
+          </a>
+        </li>
+        <!-- 필요하면 LinkedIn, X 등 추가 -->
+      </ul>
+    </section>
+
+    <hr class="mt-12" />
+
+    <!-- 콜로폰 -->
+    <section class="mt-10">
+      <p class="section-label mb-6">Colophon</p>
+      <div class="prose">
+        <p>
+          이 사이트는 <a href="https://astro.build" target="_blank" rel="noopener noreferrer">Astro</a>로 만들었습니다.
+          스타일은 <a href="https://tailwindcss.com" target="_blank" rel="noopener noreferrer">Tailwind CSS</a>,
+          글은 MDX로 작성합니다.
+          <a href="https://pages.cloudflare.com" target="_blank" rel="noopener noreferrer">Cloudflare Pages</a>에 배포됩니다.
+        </p>
+        <p>
+          본문 폰트는 <a href="https://github.com/orioncactus/pretendard" target="_blank" rel="noopener noreferrer">Pretendard</a>,
+          코드 폰트는 <a href="https://www.jetbrains.com/lp/mono/" target="_blank" rel="noopener noreferrer">JetBrains Mono</a>입니다.
+          인용구에는 Noto Serif KR을 씁니다.
+        </p>
+        <p>
+          디자인은 <a href="https://www.robinsloan.com" target="_blank" rel="noopener noreferrer">Robin Sloan의 웹사이트</a>에서 영감을 받았습니다.
+          소스 코드는 <a href="https://github.com/ubukki/ubukki.com" target="_blank" rel="noopener noreferrer">GitHub</a>에 공개되어 있습니다.
+        </p>
+      </div>
+    </section>
+
   </div>
 </BaseLayout>
