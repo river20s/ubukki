@@ -44,11 +44,7 @@
       sun?.classList.add('hidden');
       moon?.classList.remove('hidden');
     }
-    // 파비콘 교체
-    const favicon = document.getElementById('favicon') as HTMLLinkElement | null;
-    if (favicon) {
-      favicon.href = theme === 'dark' ? '/turtle-white.ico' : '/turtle.ico';
-    }
+
   }
 
   // 초기화

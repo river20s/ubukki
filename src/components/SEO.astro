@@ -68,8 +68,9 @@ const naverVerification = import.meta.env.PUBLIC_NAVER_VERIFICATION;
   <meta name="naver-site-verification" content={naverVerification} />
 )}
 
-<!-- Favicon (다크모드 동기화는 BaseLayout의 스크립트에서 처리) -->
-<link id="favicon" rel="icon" type="image/x-icon" href="/turtle.ico" />
+<!-- Favicon: OS 테마 기준 -->
+<link rel="icon" type="image/x-icon" href="/turtle.ico" media="(prefers-color-scheme: light)" />
+<link rel="icon" type="image/x-icon" href="/turtle-white.ico" media="(prefers-color-scheme: dark)" />
 
 <!-- RSS -->
 <link rel="alternate" type="application/rss+xml" title={SITE_TITLE} href="/rss.xml" />
