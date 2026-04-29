@@ -27,12 +27,18 @@ const { title, description, ogImage, pubDate, updatedDate, type } = Astro.props;
       updatedDate={updatedDate}
       type={type}
     />
-    <!-- 테마 깜빡임 방지: 렌더링 전에 테마 적용 -->
+    <!-- 테마 깜빡임 방지: 렌더링 전에 테마 적용 + 파비콘 동기화 -->
     <script is:inline>
       (function () {
         const stored = localStorage.getItem('ubukki-theme');
         const preferred = window.matchMedia('(prefers-color-scheme: dark)').matches ? 'dark' : 'light';
-        document.documentElement.dataset.theme = stored ?? preferred;
+        const theme = stored ?? preferred;
+        document.documentElement.dataset.theme = theme;
+        // 파비콘 교체
+        const favicon = document.getElementById('favicon');
+        if (favicon) {
+          favicon.href = theme === 'dark' ? '/turtle-white.ico' : '/turtle.ico';
+        }
       })();
     </script>
   </head>
