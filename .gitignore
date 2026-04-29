@@ -145,3 +145,6 @@ vite.config.ts.timestamp-*
 # Project Guides
 PROJECT_BRIEF.md
 ROADMAP.md
+
+# Claude Code
+.claude/
