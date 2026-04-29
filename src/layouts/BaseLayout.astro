@@ -14,6 +14,8 @@ interface Props {
 }
 
 const { title, description, ogImage, pubDate, updatedDate, type } = Astro.props;
+
+const gaId = import.meta.env.PUBLIC_GA_ID;
 ---
 
 <!doctype html>
@@ -27,6 +29,18 @@ const { title, description, ogImage, pubDate, updatedDate, type } = Astro.props;
       updatedDate={updatedDate}
       type={type}
     />
+    <!-- Google Analytics 4 (환경변수 PUBLIC_GA_ID 설정 시 로드) -->
+    {gaId && (
+      <>
+        <script is:inline async src={`https://www.googletagmanager.com/gtag/js?id=${gaId}`}></script>
+        <script is:inline define:vars={{ gaId }}>
+          window.dataLayer = window.dataLayer || [];
+          function gtag() { dataLayer.push(arguments); }
+          gtag('js', new Date());
+          gtag('config', gaId);
+        </script>
+      </>
+    )}
     <!-- 테마 깜빡임 방지: 렌더링 전에 테마 적용 -->
     <script is:inline>
       (function () {
